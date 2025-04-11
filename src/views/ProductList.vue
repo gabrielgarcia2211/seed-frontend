@@ -1,7 +1,20 @@
 <template>
   <div class="container py-5">
     <h2 class="text-center mb-4 text-white">Listado de Productos</h2>
-    <div v-if="products.length" class="table-responsive">
+
+    <div>
+      <button
+        type="button"
+        class="btn btn-success mb-3"
+        data-bs-toggle="modal"
+        data-bs-target="#addProductModal"
+      >
+        Añadir Producto
+      </button>
+      <ProductCreateModal @saved="addProduct" />
+    </div>
+
+    <div v-if="products.length > 0" class="table-responsive">
       <table class="table table-bordered table-hover align-middle">
         <thead class="table-dark text-center">
           <tr>
@@ -21,7 +34,6 @@
         </tbody>
       </table>
     </div>
-
     <div v-else class="alert alert-info text-center">
       No hay productos registrados.
     </div>
@@ -31,7 +43,8 @@
 <script setup>
 import { ref } from "vue";
 import { ProductService } from "../services/ProductService";
-import { ReadHttpStatusErrors } from "@/utils";
+import { AlertsComponent, ReadHttpStatusErrors } from "@/utils";
+import ProductCreateModal from "../views/actions/ProductCreateModal.vue";
 
 const products = ref([]);
 
@@ -57,11 +70,14 @@ const formatStatus = (value) => {
     : '<span class="badge bg-danger">Agotado</span>';
 };
 
-const editProduct = (id) => {
-  console.log("Editar producto con ID:", id);
-};
-
-const deleteProduct = (id) => {
-  console.log("Eliminar producto con ID:", id);
+const addProduct = async (newProduct) => {
+  try {
+    await ProductService.create(newProduct);
+    AlertsComponent.success("Realizado", "Producto añadido");
+    getProducts();
+  } catch (error) {
+    console.log(error);
+    ReadHttpStatusErrors(error);
+  }
 };
 </script>
