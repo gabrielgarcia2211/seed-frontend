@@ -45,7 +45,9 @@ const router = useRouter();
 
 const handleLogin = async () => {
   try {
-    await AuthService.login({ email: email.value, password: password.value });
+    let user = await AuthService.login({ email: email.value, password: password.value });
+    const { token } = user.data.data;
+    localStorage.setItem("token", token);
     router.push("/products");
   } catch (error) {
     ReadHttpStatusErrors(error);
