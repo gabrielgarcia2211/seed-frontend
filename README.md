@@ -12,10 +12,10 @@ Crear una pequeña SPA (Single Page Application) conectada a una API de Laravel.
 
 ## Requisitos
 
-Antes de comenzar, asegúrate de tener los siguientes elementos instalados en tu máquina:
+Antes de comenzar, asegúrate de tener los siguientes proyecto instalados en tu maquina, ya que son dependientes:
 
-- [Node.js API](https://github.com/gabrielgarcia2211/seed-microservice/) 
-- [Laravel API](https://github.com/gabrielgarcia2211/seed-backend)
+- [Node.js API](https://github.com/gabrielgarcia2211/seed-microservice/) (opcional)
+- [Laravel API](https://github.com/gabrielgarcia2211/seed-backend) (requerido)
 
 ## 📁 Estructura del Proyecto
 
