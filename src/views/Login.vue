@@ -14,8 +14,8 @@
           class="form-control"
           id="email"
           placeholder="correo@ejemplo.com"
-          required
         />
+        <span v-if="errors.email" class="text-danger">{{ errors.email }}</span>
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">Contraseña</label>
@@ -25,8 +25,10 @@
           class="form-control"
           id="password"
           placeholder="••••••••"
-          required
         />
+        <span v-if="errors.password" class="text-danger">{{
+          errors.password
+        }}</span>
       </div>
       <button type="submit" class="btn btn-primary w-100">Ingresar</button>
       <div class="row text-center mt-3">
@@ -43,13 +45,35 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { AuthService } from "../services/authService";
 import { ReadHttpStatusErrors } from "@/utils";
+import * as Yup from "yup";
 
 const email = ref("");
 const password = ref("");
+const errors = ref({
+  email: "",
+  password: "",
+});
 const router = useRouter();
 
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email("El correo electrónico no es válido")
+    .required("El correo electrónico es obligatorio"),
+  password: Yup.string()
+    .min(6, "La contraseña debe tener al menos 8 caracteres")
+    .required("La contraseña es obligatoria"),
+});
+
 const handleLogin = async () => {
+  errors.value = {
+    email: "",
+    password: "",
+  };
   try {
+    await validationSchema.validate(
+      { email: email.value, password: password.value },
+      { abortEarly: false }
+    );
     let user = await AuthService.login({
       email: email.value,
       password: password.value,
@@ -57,8 +81,14 @@ const handleLogin = async () => {
     const { token } = user.data.data;
     localStorage.setItem("token", token);
     router.push("/products");
-  } catch (error) {
-    ReadHttpStatusErrors(error);
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      err.inner.forEach((error) => {
+        errors.value[error.path] = error.message;
+      });
+    } else {
+      ReadHttpStatusErrors(err);
+    }
   }
 };
 </script>
