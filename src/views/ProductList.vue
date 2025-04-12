@@ -5,11 +5,18 @@
     <div>
       <button
         type="button"
-        class="btn btn-success mb-3"
+        class="btn btn-primary mb-3"
         data-bs-toggle="modal"
         data-bs-target="#addProductModal"
       >
         Añadir Producto
+      </button>
+      <button
+        type="button"
+        class="btn btn-success mb-3 ms-2"
+        @click="exportToExcel"
+      >
+        <font-awesome-icon :icon="['fas', 'file-excel']" />
       </button>
       <ProductCreateModal @saved="addProduct" />
     </div>
@@ -71,8 +78,10 @@
 import { ref, computed } from "vue";
 import Navbar from "@/components/Navbar.vue";
 import { ProductService } from "../services/ProductService";
+import { ReportService } from "../services/ReportService";
 import { AlertsComponent, ReadHttpStatusErrors } from "@/utils";
 import ProductCreateModal from "../views/actions/ProductCreateModal.vue";
+import * as XLSX from "xlsx";
 
 const products = ref([]);
 const currentPage = ref(1);
@@ -122,6 +131,22 @@ const paginatedProducts = computed(() => {
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
+  }
+};
+
+const exportToExcel = async () => {
+  try {
+    let response = await ReportService.getReportJson();
+    if (!response.data || response.data.length === 0) {
+      AlertsComponent.info("Información", "No hay datos para exportar.");
+      return;
+    }
+    const worksheet = XLSX.utils.json_to_sheet(response.data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Productos");
+    XLSX.writeFile(workbook, "Listado_Productos.xlsx");
+  } catch (error) {
+    ReadHttpStatusErrors(error);
   }
 };
 </script>

@@ -14,4 +14,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export default api;
+const apiMicroservice = axios.create({
+  baseURL: "http://127.0.0.1:3000",
+  withCredentials: true,
+  headers: { Accept: "application/json" },
+});
+
+apiMicroservice.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export { api, apiMicroservice };
