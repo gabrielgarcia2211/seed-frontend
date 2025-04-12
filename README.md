@@ -1,29 +1,98 @@
-# .
 
-This template should help get you started developing with Vue 3 in Vite.
+# 🧩 Proyecto Frontend en Vue.js
 
-## Recommended IDE Setup
+## Objetivo
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Crear una pequeña SPA (Single Page Application) conectada a una API de Laravel. La aplicación debe realizar las siguientes acciones:
 
-## Customize configuration
+- Crear un formulario de autenticación con Vue.js.
+- Listar los productos desde la API utilizando Axios.
+- Permitir la creación de nuevos productos mediante un formulario.
+- Validar los campos obligatorios en el frontend.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Requisitos
 
-## Project Setup
+Antes de comenzar, asegúrate de tener los siguientes proyecto instalados en tu maquina, ya que son dependientes:
 
-```sh
+- [Node.js API](https://github.com/gabrielgarcia2211/seed-microservice/) (opcional)
+- [Laravel API](https://github.com/gabrielgarcia2211/seed-backend) (requerido)
+
+## 📁 Estructura del Proyecto
+
+```
+public
+│   favicon.ico                # Ícono de la aplicación
+│
+└───src
+    │   App.vue                # Componente principal de la aplicación
+    │   axios.js               # Configuración de Axios para solicitudes HTTP
+    │   main.js                # Archivo principal para inicializar la app Vue
+    │
+    ├───api
+    │       auth.js            # API para la autenticación
+    │       products.js        # API para gestionar productos
+    │       report.js          # API para generar reportes
+    │
+    ├───assets
+    │       main.css           # Estilos globales de la aplicación
+    │
+    ├───components
+    │       Navbar.vue         # Componente de la barra de navegación
+    │
+    ├───router
+    │       index.js           # Configuración de rutas de la SPA
+    │
+    ├───services
+    │       authService.js     # Servicio para gestionar la autenticación
+    │       productService.js  # Servicio para gestionar productos
+    │       reportService.js   # Servicio para generar reportes
+    │
+    ├───utils
+    │   │   index.js           # Utilidades generales
+    │   │
+    │   ├───alerts
+    │   │       alertService.js # Servicio para mostrar alertas
+    │   │
+    │   └───errors
+    │           readHttpStatusErrors.js # Manejo de errores HTTP
+    │
+    └───views
+        │   Login.vue          # Vista para la página de inicio de sesión
+        │   ProductList.vue    # Vista para listar productos
+        │   Register.vue       # Vista para el registro de nuevos usuarios
+        │
+        └───actions
+                ProductCreateModal.vue # Modal para crear productos
+
+```
+
+
+##  ⚙️ Instalación
+
+### 🔁 1. Clonar el repositorio
+
+Clona este proyecto de Vue.js:
+
+```bash
+git clone https://github.com/gabrielgarcia2211/seed-frontend.git
+cd seed-frontend
+```
+
+
+#### 📦 2. Instalar dependencias
+
+Dentro del directorio del proyecto, instala las dependencias utilizando NPM:
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+#### 🖥 3. Levantar el servidor de desarrollo
 
-```sh
+Dentro del directorio del proyecto, iniciamos el servidor:
+
+```bash
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+Visita: http://localhost:5173/
