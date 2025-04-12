@@ -9,6 +9,7 @@ export const register = async (data) => {
 };
 
 export const logout = async () => {
+  await api.post("/api/user/logout")
   localStorage.removeItem("token");
-  return api.post("/api/logout");
+  return true;
 };
