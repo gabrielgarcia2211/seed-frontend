@@ -63,6 +63,20 @@
                 errors.descripcion
               }}</span>
             </div>
+            <div class="mb-3">
+              <label for="formFile" class="form-label"
+                >Seleccionar archivo</label
+              >
+              <input
+                class="form-control"
+                type="file"
+                id="formFile"
+                @change="handleFileUpload"
+              />
+              <span v-if="errors.file" class="text-danger">{{
+                errors.file
+              }}</span>
+            </div>
           </div>
           <div class="modal-footer">
             <button
@@ -92,13 +106,15 @@ const product = ref({
   nombre: "",
   precio: null,
   descripcion: "",
+  file: "",
   activo: "",
 });
 
 const errors = ref({
   nombre: "",
-  precio: "",
+  precio: null,
   descripcion: "",
+  file: "",
 });
 
 let modalInstance = null;
@@ -120,8 +136,9 @@ const validationSchema = Yup.object({
 const handleSubmit = async () => {
   errors.value = {
     nombre: "",
-    precio: "",
+    precio: null,
     descripcion: "",
+    file: "",
   };
   try {
     await validationSchema.validate(
@@ -133,16 +150,26 @@ const handleSubmit = async () => {
       },
       { abortEarly: false }
     );
-    emit("saved", { ...product.value });
+
+    const formData = new FormData();
+    formData.append("nombre", product.value.nombre);
+    formData.append("precio", product.value.precio);
+    formData.append("descripcion", product.value.descripcion);
+    formData.append("activo", product.value.activo);
+    if (product.value.file) {
+      formData.append("attachment", product.value.file);
+    }
+
+    emit("saved", formData);
     manageModal();
     product.value = {
       nombre: "",
-      precio: "",
+      precio: null,
       descripcion: "",
+      file: "",
       activo: 1,
     };
   } catch (err) {
-    console.log(err)
     if (err.name === "ValidationError") {
       err.inner.forEach((error) => {
         errors.value[error.path] = error.message;
@@ -151,19 +178,27 @@ const handleSubmit = async () => {
       ReadHttpStatusErrors(err);
     }
   }
+};
 
-  function manageModal(){
-    document.activeElement.blur();
-    modalInstance.hide();
-    modalInstance._element.addEventListener(
-      "hidden.bs.modal",
-      () => {
-        document
-          .querySelectorAll(".modal-backdrop")
-          .forEach((el) => el.remove());
-      },
-      { once: true }
-    );
-  };
+function manageModal() {
+  document.activeElement.blur();
+  modalInstance.hide();
+  modalInstance._element.addEventListener(
+    "hidden.bs.modal",
+    () => {
+      document.querySelectorAll(".modal-backdrop").forEach((el) => el.remove());
+    },
+    { once: true }
+  );
+}
+
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    product.value.file = file;
+    errors.value.file = "";
+  } else {
+    errors.value.file = "Debe seleccionar un archivo";
+  }
 };
 </script>

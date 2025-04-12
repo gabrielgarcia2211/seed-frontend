@@ -28,6 +28,7 @@
             <th>Nombre</th>
             <th>Precio</th>
             <th>Descripción</th>
+            <th>Imagen</th>
             <th>Estado</th>
           </tr>
         </thead>
@@ -36,6 +37,11 @@
             <td>{{ product.nombre }}</td>
             <td>${{ formatPrice(product.precio) }}</td>
             <td>{{ product.descripcion }}</td>
+            <td class="text-center">
+              <a :href="product.file_url" target="_blank" v-if="product.file_url">
+                <img :src="product.file_url" alt="Imagen del producto" class="img-thumbnail" style="width: 50px; height: 50px;" />
+              </a>
+            </td>
             <td class="text-center" v-html="formatStatus(product.activo)"></td>
           </tr>
         </tbody>
@@ -146,7 +152,14 @@ const exportToExcel = async () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Productos");
     XLSX.writeFile(workbook, "Listado_Productos.xlsx");
   } catch (error) {
-    ReadHttpStatusErrors(error);
+    if (error.code && error.code == "ERR_NETWORK") {
+      AlertsComponent.error(
+        "Error de Red",
+        "No se pudo conectar con el servidor. Por favor, verifica tu conexión."
+      );
+    } else {
+      ReadHttpStatusErrors(error);
+    }
   }
 };
 </script>
