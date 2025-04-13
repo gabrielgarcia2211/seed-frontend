@@ -31,6 +31,7 @@ export default function readHttpStatusErrors(error) {
             break;
         case 401:
         case 419:
+            localStorage.removeItem("token");
             alertService.error("Tu sesión expiró", "");
             setTimeout(() => (window.location.href = "/"), 2000);
             break;
