@@ -13,10 +13,10 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   faRightFromBracket,
   faFileExcel,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faRightFromBracket);
-library.add(faFileExcel);
+library.add(faRightFromBracket, faFileExcel, faUser);
 
 const app = createApp(App);
 

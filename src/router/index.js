@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import ProductList from "../views/ProductList.vue";
+import FormularioUsuario from "../views/FormularioUsuario.vue";
 
 const routes = [
   { path: "/", redirect: "/login" },
   { path: "/login", component: Login },
   { path: "/register", component: Register },
   { path: "/products", component: ProductList, meta: { requiresAuth: true } },
+  { path: "/form", component: FormularioUsuario, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({

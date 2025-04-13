@@ -5,6 +5,13 @@
       <button
         class="btn btn-outline-danger d-flex align-items-center gap-2"
         type="button"
+        @click="formUser"
+      >
+        <font-awesome-icon :icon="['fas', 'user']" /> Formulario Usuario
+      </button>
+      <button
+        class="btn btn-outline-danger d-flex align-items-center gap-2"
+        type="button"
         @click="logout"
       >
         <font-awesome-icon :icon="['fas', 'right-from-bracket']" />
@@ -27,5 +34,9 @@ const logout = async () => {
   } catch (error) {
     ReadHttpStatusErrors(error);
   }
+};
+
+const formUser = async () => {
+  router.push("/form");
 };
 </script>
